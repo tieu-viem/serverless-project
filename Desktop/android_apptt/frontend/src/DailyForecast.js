@@ -26,32 +26,35 @@ const DailyForecast = ({ cityName }) => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-  if (!weatherData) return null;
+  if (!weatherData || !weatherData.list) return null;
 
   return (
     <div>
       <h2>Daily Forecast for {cityName}</h2>
-      <p>Country: {weatherData.city.country}</p>
-      <p>Timezone: {weatherData.city.timezone}</p>
-      <h3>City List:</h3>
-      <ul>
-        {weatherData.list.map((cityData, index) => (
-          <li key={index}>
-            <p>City Name: {cityData.city.name}</p>
-            <p>Latitude: {cityData.city.coord.lat}</p>
-            <p>Longitude: {cityData.city.coord.lon}</p>
-            <p>Country: {cityData.city.country}</p>
-            <p>Population: {cityData.city.population}</p>
-            {/* Display weather forecast for the city */}
-            <p>Temperature: {cityData.main.temp} K</p>
-            <p>Min Temperature: {cityData.main.temp_min} K</p>
-            <p>Max Temperature: {cityData.main.temp_max} K</p>
-            <p>Pressure: {cityData.main.pressure} hPa</p>
-            <p>Humidity: {cityData.main.humidity}%</p>
-            <p>Weather Description: {cityData.weather[0].description}</p>
-          </li>
-        ))}
-      </ul>
+      {weatherData.list.map((data, index) => (
+        <div key={index}>
+          <h3>Date: {new Date(data.dt * 1000).toLocaleDateString()}</h3>
+          <p>Temperature:</p>
+          <ul>
+            <li>Day: {data.main.temp} K</li>
+            <li>Min: {data.main.temp_min} K</li>
+            <li>Max: {data.main.temp_max} K</li>
+            <li>Night: {data.main.temp_night} K</li>
+            <li>Evening: {data.main.temp_eve} K</li>
+            <li>Morning: {data.main.temp_morn} K</li>
+          </ul>
+          <p>Feels Like:</p>
+          <ul>
+            <li>Day: {data.main.feels_like.day} K</li>
+            <li>Night: {data.main.feels_like.night} K</li>
+            <li>Evening: {data.main.feels_like.eve} K</li>
+            <li>Morning: {data.main.feels_like.morn} K</li>
+          </ul>
+          <p>Pressure: {data.main.pressure} hPa</p>
+          <p>Humidity: {data.main.humidity}%</p>
+          <p>Weather Description: {data.weather[0].description}</p>
+        </div>
+      ))}
     </div>
   );
 };
